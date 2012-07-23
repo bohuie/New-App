@@ -1,0 +1,16 @@
+.page-header
+  %h1
+    Edit User
+    %small
+      =@user.display_name
+      .btn-group.pull-right
+        = link_to admin_index_path, :class => 'btn' do
+          %i.icon-arrow-left
+          Back to Admin
+        = link_to admin_users_path, :class => 'btn' do
+          %i.icon-arrow-left
+          Back to Users
+
+= simple_form_for( [:admin, @user] , :html=>{:class=>'form-horizontal'} ) do |f| 
+  = render :partial => 'form', :locals => {:f => f, :text => 'Update'}
+  =link_to 'Cancel', admin_users_path, :class => 'btn btn-danger'

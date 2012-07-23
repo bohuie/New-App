@@ -1,0 +1,53 @@
+.page-header
+  %h1
+    All Users
+    %small
+      .btn-group.pull-right
+        = link_to admin_index_path, :class => 'btn' do
+          %i.icon-arrow-left
+          Back to Admin
+          
+= link_to 'Create a new user', new_admin_user_path, :class => 'btn btn-primary'
+%br
+%br
+=render :partial => 'search'
+- if @users
+  = page_entries_info @users, :model => 'User'     
+%table.table.table-striped.table-bordered
+  %thead
+    %tr
+      %th
+        Display Name
+      %th
+        Active?
+      %th
+        Admin?
+      %th
+        Email
+      %th
+        Created At
+      %th
+        Actions
+  %tbody
+    -@users.each do |u|
+      %tr
+        %td
+          =u.display_name
+        %td
+          =status_image u.active?, ['active', 'inactive']         
+        %td
+          =status_image u.admin?, ['yes', 'no']         
+        %td
+          =u.email
+        %td
+          =u.created_at.to_formatted_s(:short_with_year)
+        %td
+          %span{:style => 'white-space: nowrap'}
+            -uact = u.active? ? 'Inactivate': 'Activate'
+            =action_links [:admin, u], :exclude => [:index, :show], :delete => {:icon_class => !u.active? ? ' icon-ok icon-white' : nil, :class=>(u.active? ? 'btn btn-danger' : 'btn btn-primary'), :title => uact, :alt_text => uact, :confirm => "Are you sure you want to #{uact} this user."}
+
+    -if @users.total_pages > 1
+      %tr
+        %td{:colspan => 7}
+          = will_paginate @users, :renderer => 'WillPaginateHelper::LinkRenderer'          
+      
